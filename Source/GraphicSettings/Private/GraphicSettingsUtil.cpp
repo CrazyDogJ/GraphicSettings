@@ -3,6 +3,7 @@
 
 #include "GraphicSettingsUtil.h"
 
+#include "GameUserSettingsExtend.h"
 #include "GraphicProjectSettings.h"
 #include "GameFramework/GameUserSettings.h"
 #include "Kismet/GameplayStatics.h"
@@ -67,6 +68,11 @@ void UGraphicSettingsBlueprintFunctionLibrary::SetGraphicSettingLevel(EGraphicSc
 	case EGraphicScalabilityType::GST_ShadingQuality: GameUserSettings->SetShadingQuality((int32)QualityLevel);
 		break;
 	default: ;
+	}
+
+	if (const auto Extend = Cast<UGameUserSettingsExtend>(GameUserSettings))
+	{
+		Extend->GlobalGraphicQuality = EGlobalQualityLevels::Custom;
 	}
 }
 

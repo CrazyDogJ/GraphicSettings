@@ -7,6 +7,29 @@
 #include "GraphicProjectSettings.h"
 #include "SoundClassDescription.h"
 
+EGlobalQualityLevels UGameUserSettingsExtend::GetCurrentGlobalGraphicQuality()
+{
+	return GlobalGraphicQuality;
+}
+
+void UGameUserSettingsExtend::SetGlobalGraphicQuality(EGlobalQualityLevels Value)
+{
+	GlobalGraphicQuality = Value;
+	if (Value != EGlobalQualityLevels::Custom)
+	{
+		SetViewDistanceQuality((int32)Value);
+		SetAntiAliasingQuality((int32)Value);
+		SetShadowQuality((int32)Value);
+		SetGlobalIlluminationQuality((int32)Value);
+		SetReflectionQuality((int32)Value);
+		SetPostProcessingQuality((int32)Value);
+		SetTextureQuality((int32)Value);
+		SetVisualEffectQuality((int32)Value);
+		SetFoliageQuality((int32)Value);
+		SetShadingQuality((int32)Value);
+	}
+}
+
 EAntiAliasingMethod UGameUserSettingsExtend::GetCurrentAntiAliasingMethod()
 {
 	static IConsoleVariable* GetAA = IConsoleManager::Get().FindConsoleVariable(TEXT("r.AntiAliasingMethod"));		
@@ -94,7 +117,7 @@ float UGameUserSettingsExtend::GetSoundClassVolume(FName SoundClassName)
 {
 	if (const auto Settings = GetMutableDefault<UGraphicProjectSettings>())
 	{
-		if (const auto SoundClassDesc = Settings->GetSoundClassDescDataAsset())
+		if (Settings->GetSoundClassDescDataAsset())
 		{
 			if (const auto Found = AudioMixSettings.Find(SoundClassName))
 			{

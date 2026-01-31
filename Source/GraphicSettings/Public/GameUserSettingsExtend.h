@@ -6,6 +6,18 @@
 #include "GameFramework/GameUserSettings.h"
 #include "GameUserSettingsExtend.generated.h"
 
+UENUM(BlueprintType)
+enum class EGlobalQualityLevels : uint8
+{
+	Low,
+	Medium,
+	High,
+	Epic,
+	Cinematic,
+	Custom,
+	Num
+};
+
 /**
  * A game user settings that extend some user settings like aa method and sound options and so on.
  */
@@ -20,6 +32,15 @@ public:
 
 	UPROPERTY(config)
 	TMap<FName, float> AudioMixSettings;
+
+	UPROPERTY(config)
+	EGlobalQualityLevels GlobalGraphicQuality = EGlobalQualityLevels::Custom;
+
+	UFUNCTION(BlueprintPure)
+	EGlobalQualityLevels GetCurrentGlobalGraphicQuality();
+
+	UFUNCTION(BlueprintCallable)
+	void SetGlobalGraphicQuality(EGlobalQualityLevels Value);
 	
 	UFUNCTION(BlueprintPure)
 	EAntiAliasingMethod GetCurrentAntiAliasingMethod();
