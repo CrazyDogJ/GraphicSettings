@@ -56,6 +56,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "User Settings")
 	static void SetGraphicsRHI(EGraphicsRHI GraphicsRHI);
 
-	UFUNCTION(BlueprintPure, BlueprintPure, Category = "User Settings")
+	UFUNCTION(BlueprintPure, Category = "User Settings")
 	static EGraphicsRHI GetCurrentGraphicsRHI();
 };
