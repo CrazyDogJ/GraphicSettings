@@ -12,6 +12,27 @@ EGlobalQualityLevels UGameUserSettingsExtend::GetCurrentGlobalGraphicQuality()
 	return GlobalGraphicQuality;
 }
 
+float UGameUserSettingsExtend::GetMotionBlurAmount() const
+{
+	static IConsoleVariable* GetMotionBlurAmount = IConsoleManager::Get().FindConsoleVariable(TEXT("r.MotionBlur.Scale"));
+	if (ensure(GetMotionBlurAmount))
+	{
+		return GetMotionBlurAmount->GetFloat();
+	}		
+	return MotionBlurAmount;
+}
+
+void UGameUserSettingsExtend::SetMotionBlurAmount(float Value)
+{
+	static IConsoleVariable* SetMotionBlurAmount = IConsoleManager::Get().FindConsoleVariable(TEXT("r.MotionBlur.Scale"));
+	if (ensure(SetMotionBlurAmount))
+	{
+		SetMotionBlurAmount->Set(Value, ECVF_SetByGameSetting);
+	}
+	
+	MotionBlurAmount = Value;
+}
+
 void UGameUserSettingsExtend::SetGlobalGraphicQuality(EGlobalQualityLevels Value)
 {
 	GlobalGraphicQuality = Value;
@@ -35,7 +56,7 @@ EAntiAliasingMethod UGameUserSettingsExtend::GetCurrentAntiAliasingMethod()
 	static IConsoleVariable* GetAA = IConsoleManager::Get().FindConsoleVariable(TEXT("r.AntiAliasingMethod"));		
 	if (ensure(GetAA))
 	{
-		AntiAliasingMethod = (uint8)GetAA->GetInt();
+		AntiAliasingMethod = GetAA->GetInt();
 	}		
 	return (EAntiAliasingMethod)AntiAliasingMethod;
 }
@@ -45,15 +66,10 @@ void UGameUserSettingsExtend::SetAntiAliasingMethod(EAntiAliasingMethod Value)
 	static IConsoleVariable* SetAA = IConsoleManager::Get().FindConsoleVariable(TEXT("r.AntiAliasingMethod"));
 	if (ensure(SetAA))
 	{
-		// ECVF_SetByGameSetting , ECVF_SetByCode, ECVF_SetByProjectSetting
-		SetAA->Set((uint8)Value, ECVF_SetByGameSetting);
-		SetAA->Set((uint8)Value, ECVF_SetByProjectSetting);
+		SetAA->Set(Value, ECVF_SetByGameSetting);
 	}
 	
-	static auto CVar = IConsoleManager::Get().FindConsoleVariable(TEXT("r.AntiAliasingMethod"));
-	CVar->Set(Value, ECVF_SetByGameSetting);
-	
-	AntiAliasingMethod = (uint8)Value;
+	AntiAliasingMethod = Value;
 }
 
 void UGameUserSettingsExtend::InitSoundSettings(Audio::FDeviceId Id)
@@ -83,9 +99,12 @@ void UGameUserSettingsExtend::ApplyNonResolutionSettings()
 {
 	Super::ApplyNonResolutionSettings();
 
-	static auto CVar = IConsoleManager::Get().FindConsoleVariable(TEXT("r.AntiAliasingMethod"));
-	CVar->Set(AntiAliasingMethod, ECVF_SetByGameSetting);
+	static auto CVarAA = IConsoleManager::Get().FindConsoleVariable(TEXT("r.AntiAliasingMethod"));
+	CVarAA->Set(AntiAliasingMethod, ECVF_SetByGameSetting);
 
+	static auto CVarMotionBlur = IConsoleManager::Get().FindConsoleVariable(TEXT("r.MotionBlur.Scale"));
+	CVarMotionBlur->Set(MotionBlurAmount, ECVF_SetByGameSetting);
+	
 #if WITH_SHIPPING
 	if (FInternationalization::Get().IsInitialized())
 	{

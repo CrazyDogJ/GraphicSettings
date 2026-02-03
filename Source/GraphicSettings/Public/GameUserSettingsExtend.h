@@ -34,11 +34,20 @@ public:
 	TMap<FName, float> AudioMixSettings;
 
 	UPROPERTY(config)
+	float MotionBlurAmount = 1.0f;
+
+	UPROPERTY(config)
 	EGlobalQualityLevels GlobalGraphicQuality = EGlobalQualityLevels::Custom;
 
 	UFUNCTION(BlueprintPure)
 	EGlobalQualityLevels GetCurrentGlobalGraphicQuality();
 
+	UFUNCTION(BlueprintPure)
+	float GetMotionBlurAmount() const;
+
+	UFUNCTION(BlueprintCallable)
+	void SetMotionBlurAmount(float Value);
+	
 	UFUNCTION(BlueprintCallable)
 	void SetGlobalGraphicQuality(EGlobalQualityLevels Value);
 	
