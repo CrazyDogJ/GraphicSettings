@@ -99,6 +99,11 @@ void UGameUserSettingsExtend::ApplyNonResolutionSettings()
 {
 	Super::ApplyNonResolutionSettings();
 
+	if (!IdGuid.IsValid())
+	{
+		IdGuid = FGuid::NewGuid();
+	}
+	
 	static auto CVarAA = IConsoleManager::Get().FindConsoleVariable(TEXT("r.AntiAliasingMethod"));
 	CVarAA->Set(AntiAliasingMethod, ECVF_SetByGameSetting);
 
@@ -106,20 +111,9 @@ void UGameUserSettingsExtend::ApplyNonResolutionSettings()
 	CVarMotionBlur->Set(MotionBlurAmount, ECVF_SetByGameSetting);
 	
 #if WITH_SHIPPING
-	if (FInternationalization::Get().IsInitialized())
-	{
-		FString Culture;
-		GConfig->GetString(TEXT("Internationalization"), TEXT("Culture"), Culture, GGameUserSettingsIni);
-		FInternationalization::Get().SetCurrentCulture(Culture);
-
-		FString Language;
-		GConfig->GetString(TEXT("Internationalization"), TEXT("Language"), Language, GGameUserSettingsIni);
-		FInternationalization::Get().SetCurrentLanguage(Language);
-
-		FString Locale;
-		GConfig->GetString(TEXT("Internationalization"), TEXT("Locale"), Locale, GGameUserSettingsIni);
-		FInternationalization::Get().SetCurrentLanguage(Locale);
-	}
+	FString Culture;
+	GConfig->GetString(TEXT("Internationalization"), TEXT("Culture"), Culture, GGameUserSettingsIni);
+	FInternationalization::Get().SetCurrentCulture(Culture);
 
 	FAudioDeviceManagerDelegates::OnAudioDeviceCreated.AddLambda([&](Audio::FDeviceId AudioDeviceId)
 	{

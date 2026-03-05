@@ -26,7 +26,9 @@ class GRAPHICSETTINGS_API UGameUserSettingsExtend : public UGameUserSettings
 {
 	GENERATED_BODY()
 public:
-
+	UPROPERTY(config)
+	FGuid IdGuid;
+	
 	UPROPERTY(config)
 	uint8 AntiAliasingMethod;
 
@@ -39,6 +41,9 @@ public:
 	UPROPERTY(config)
 	EGlobalQualityLevels GlobalGraphicQuality = EGlobalQualityLevels::Custom;
 
+	UFUNCTION(BlueprintPure)
+	FGuid GetLocalId() const { return IdGuid; }
+	
 	UFUNCTION(BlueprintPure)
 	EGlobalQualityLevels GetCurrentGlobalGraphicQuality();
 
