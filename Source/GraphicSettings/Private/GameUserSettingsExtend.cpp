@@ -110,7 +110,7 @@ void UGameUserSettingsExtend::ApplyNonResolutionSettings()
 	static auto CVarMotionBlur = IConsoleManager::Get().FindConsoleVariable(TEXT("r.MotionBlur.Scale"));
 	CVarMotionBlur->Set(MotionBlurAmount, ECVF_SetByGameSetting);
 	
-#if WITH_SHIPPING
+#if UE_BUILD_SHIPPING
 	FString Culture;
 	GConfig->GetString(TEXT("Internationalization"), TEXT("Culture"), Culture, GGameUserSettingsIni);
 	FInternationalization::Get().SetCurrentCulture(Culture);
